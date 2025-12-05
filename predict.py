@@ -1,10 +1,15 @@
 import json
 import numpy as np
 import joblib
+import zipfile
 from feature_builder import extract_features
 
-model = joblib.load("model.pkl")
+# فتح ملف ZIP وقراءة model.pkl منه مباشرة
+with zipfile.ZipFile("model.zip", "r") as z:
+    with z.open("model.pkl") as f:
+        model = joblib.load(f)
 
+# تحميل ترتيب الخصائص
 with open("feature_columns.json", "r") as f:
     FEATURE_COLS = json.load(f)
 
