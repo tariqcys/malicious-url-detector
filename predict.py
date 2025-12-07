@@ -3,7 +3,11 @@ import numpy as np
 import joblib
 from feature_builder import extract_features
 
-model = joblib.load("model.pkl")
+import lzma
+import joblib
+
+with lzma.open("light_model.pkl.xz", "rb") as f:
+    model = joblib.load(f)
 
 with open("feature_columns.json", "r") as f:
     FEATURE_COLS = json.load(f)
