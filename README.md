@@ -24,3 +24,11 @@ The system uses a trained RandomForest model with handcrafted URL features extra
 
 ## ▶️ How to Run
 1. Install requirements:
+2. 
+## 🏆 Use Case
+Perfect for:
+- Cybersecurity awareness
+- Hackathons
+- Educational demonstrations
+- Security research previews
+
