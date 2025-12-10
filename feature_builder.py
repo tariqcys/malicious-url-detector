@@ -5,11 +5,14 @@ import tldextract
 SUSPICIOUS_WORDS = ["login","verify","update","secure","account","free","confirm","bank","paypal"]
 
 def has_ip(url):
-    return 1 if re.search(r"\b\d{1,3}(\.\d{1,3}){3}\b", url) else 0
+    return 1 if re.search(r"\b\d{1,3}(\.\d{1,3}){3}\b", str(url)) else 0
 
 def extract_features(url):
+    url = str(url).lower()
+
     ext = tldextract.extract(url)
-    domain = ext.domain + "." + ext.suffix
+
+    domain = (ext.domain or "") + "." + (ext.suffix or "")
 
     url_length = len(url)
     domain_length = len(domain)
@@ -20,10 +23,11 @@ def extract_features(url):
     has_at = 1 if "@" in url else 0
     has_ip_flag = has_ip(url)
     has_query = 1 if "?" in url else 0
-    suspicious_count = sum(1 for w in SUSPICIOUS_WORDS if w in url.lower())
-    tld_len = len(ext.suffix)
+    suspicious_count = sum(1 for w in SUSPICIOUS_WORDS if w in url)
+    tld_len = len(ext.suffix) if ext.suffix else 0
+    subdomain_len = len(ext.subdomain) if ext.subdomain else 0
 
-    return np.array([
+    features = np.array([
         url_length,
         domain_length,
         num_dots,
@@ -35,5 +39,7 @@ def extract_features(url):
         has_query,
         suspicious_count,
         tld_len,
-        len(ext.domain)
+        subdomain_len
     ])
+
+    return features
