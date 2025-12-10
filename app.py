@@ -16,10 +16,14 @@ with tab1:
         st.subheader("🔎 النتيجة:")
 
         # ✅ هنا التصحيح الحقيقي
-        if label == 1:
-            st.error(f"⚠️ الرابط خبيث بنسبة {prob*100:.2f}%")
-        else:
-            st.success(f"✔️ الرابط سليم بنسبة {(1 - prob)*100:.2f}%")
+      if label == 1:
+    st.error(f"⚠️ الرابط خبيث بنسبة {prob*100:.2f}%")
+    st.progress(prob)
+else:
+    safe_prob = 1 - prob
+    st.success(f"✔️ الرابط سليم بنسبة {safe_prob*100:.2f}%")
+    st.progress(safe_prob)
+
 
 with tab2:
     file = st.file_uploader("ارفع ملف CSV يحتوي على عمود url", type=["csv"])
