@@ -14,10 +14,12 @@ with tab1:
     if st.button("فحص الرابط"):
         label, prob = predict_url(url)
         st.subheader("🔎 النتيجة:")
+
+        # ✅ هنا التصحيح الحقيقي
         if label == 1:
             st.error(f"⚠️ الرابط خبيث بنسبة {prob*100:.2f}%")
         else:
-            st.success(f"✔️ الرابط سليم بنسبة {100 - prob*100:.2f}%")
+            st.success(f"✔️ الرابط سليم بنسبة {(1 - prob)*100:.2f}%")
 
 with tab2:
     file = st.file_uploader("ارفع ملف CSV يحتوي على عمود url", type=["csv"])
@@ -26,9 +28,15 @@ with tab2:
         results = []
         for u in df["url"]:
             pred, prob = predict_url(u)
-            results.append([u, pred, prob])
+
+            # الحساب الصحيح
+            safe_prob = (1 - prob) if pred == 0 else prob
+
+            results.append([u, pred, safe_prob])
+
         output_df = pd.DataFrame(results, columns=["url", "prediction", "probability"])
         st.dataframe(output_df)
+
         st.download_button(
             label="⬇️ تحميل النتائج",
             data=output_df.to_csv(index=False),
